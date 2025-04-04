@@ -13,12 +13,15 @@ builder.Services.AddDbContext<BookstoreContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("BookstoreDb"))
 );
 
-// CORS for frontend (port 3000)
+// CORS for local and deployed frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowVite", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins(
+                "http://localhost:3000", // Local Vite dev server
+                "https://gray-coast-024d85b1e.6.azurestaticapps.net" // Deployed frontend
+            )
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
@@ -32,8 +35,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowVite");
-// app.UseHttpsRedirection(); <-- we are staying HTTP-only for dev
+// Use CORS policy
+app.UseCors("AllowFrontend");
+
+// Uncomment if you want HTTPS redirection in production
+// app.UseHttpsRedirection();
 
 app.MapControllers();
 app.Run();

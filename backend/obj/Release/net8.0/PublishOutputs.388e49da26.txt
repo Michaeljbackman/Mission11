@@ -1,11 +1,6 @@
 /Users/michaelbackman/MissionEleven/backend/publish/backend
-/Users/michaelbackman/MissionEleven/backend/publish/publish/web.config
 /Users/michaelbackman/MissionEleven/backend/publish/appsettings.Development.json
 /Users/michaelbackman/MissionEleven/backend/publish/appsettings.json
-/Users/michaelbackman/MissionEleven/backend/publish/publish/appsettings.Development.json
-/Users/michaelbackman/MissionEleven/backend/publish/publish/appsettings.json
-/Users/michaelbackman/MissionEleven/backend/publish/publish/backend.deps.json
-/Users/michaelbackman/MissionEleven/backend/publish/publish/backend.runtimeconfig.json
 /Users/michaelbackman/MissionEleven/backend/publish/Bookstore.sqlite
 /Users/michaelbackman/MissionEleven/backend/publish/backend.dll
 /Users/michaelbackman/MissionEleven/backend/publish/backend.runtimeconfig.json
