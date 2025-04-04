@@ -5,7 +5,8 @@ interface FetchBooksResponse {
   totalNumBooks: number;
 }
 
-const API_URL = 'https://bookstore-backman-backend-eta8anatd5cxbuh9.eastus-01.azurewebsites.net/Books';
+const API_URL = "https://bookstore-backman-backend-eta8anatd5cxbuh9.eastus-01.azurewebsites.net/Books";
+
 
 export const fetchBooks = async (
   pageSize: number,
@@ -25,7 +26,11 @@ export const fetchBooks = async (
       throw new Error('Failed to fetch books');
     }
 
-    return await response.json();
+    const data = await response.json();
+    return {
+      books: data.Books,
+      totalNumBooks: data.TotalNumBooks
+    };
   } catch (error) {
     console.error('Error fetching books: ', error);
     throw error;
