@@ -16,10 +16,10 @@ function BookList({ selectedCategories }: { selectedCategories: string[] }) {
         .map((cat) => `category=${encodeURIComponent(cat)}`)
         .join('&');
 
-      const response = await fetch(
-        `https://localhost:5000/books/AllBooks?pageHowMany=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`
-      );
-
+        const response = await fetch(
+          `https://bookstore-backman-backend-eta8anatd5cxbuh9.eastus-01.azurewebsites.net/Books/AllBooks?pageHowMany=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`
+        );
+        
       const data = await response.json();
       setBooks(data.books);
       setTotalItems(data.totalNumBooks);

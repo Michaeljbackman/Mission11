@@ -14,7 +14,7 @@ const CategoryFilter = ({
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://localhost:5000/books/GetCategories');
+        const response = await fetch('https://bookstore-backman-backend-eta8anatd5cxbuh9.eastus-01.azurewebsites.net/Books/GetCategories');
         const data = await response.json();
         setCategories(data);
       } catch (error) {
