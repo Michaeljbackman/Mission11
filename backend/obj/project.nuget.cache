@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "C6RnDH9euJ7btZ4KEZdr96EwpTFAjrb6P/VXSsvrihtmJOiPr/PlxijG2Uk/jlg42EwKA45pSUNl+TxQFnExkQ==",
+  "dgSpecHash": "PRAAy+//AAE=",
   "success": true,
   "projectFilePath": "/Users/michaelbackman/MissionEleven/backend/backend.csproj",
   "expectedPackageFiles": [
@@ -59,7 +59,10 @@
     "/Users/michaelbackman/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "/Users/michaelbackman/.nuget/packages/system.text.encodings.web/9.0.3/system.text.encodings.web.9.0.3.nupkg.sha512",
     "/Users/michaelbackman/.nuget/packages/system.text.json/9.0.3/system.text.json.9.0.3.nupkg.sha512",
-    "/Users/michaelbackman/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512"
+    "/Users/michaelbackman/.nuget/packages/system.threading.channels/7.0.0/system.threading.channels.7.0.0.nupkg.sha512",
+    "/Users/michaelbackman/.nuget/packages/microsoft.netcore.app.ref/8.0.12/microsoft.netcore.app.ref.8.0.12.nupkg.sha512",
+    "/Users/michaelbackman/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.12/microsoft.aspnetcore.app.ref.8.0.12.nupkg.sha512",
+    "/Users/michaelbackman/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.12/microsoft.netcore.app.host.osx-arm64.8.0.12.nupkg.sha512"
   ],
   "logs": []
 }
