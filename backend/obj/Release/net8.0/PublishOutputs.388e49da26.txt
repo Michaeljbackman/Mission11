@@ -1,6 +1,7 @@
 /Users/michaelbackman/MissionEleven/backend/publish/backend
 /Users/michaelbackman/MissionEleven/backend/publish/appsettings.Development.json
 /Users/michaelbackman/MissionEleven/backend/publish/appsettings.json
+/Users/michaelbackman/MissionEleven/backend/publish/Bookstore.sqlite
 /Users/michaelbackman/MissionEleven/backend/publish/backend.dll
 /Users/michaelbackman/MissionEleven/backend/publish/backend.runtimeconfig.json
 /Users/michaelbackman/MissionEleven/backend/publish/backend.pdb
