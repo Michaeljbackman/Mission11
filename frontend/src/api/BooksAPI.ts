@@ -19,17 +19,21 @@ export const fetchBooks = async (
       .join('&');
 
     const response = await fetch(
-      `${API_URL}/AllBooks?pageHowMany=${pageSize}&pageNum=${pageNum}${selectedCategories.length ? `&${categoryParams}` : ''}`
+      `${API_URL}/AllBooks?pageHowMany=${pageSize}&pageNum=${pageNum}${
+        selectedCategories.length ? `&${categoryParams}` : ''
+      }`
     );
 
     if (!response.ok) {
       throw new Error('Failed to fetch books');
     }
 
-    const data = await response.json();
+    const result = await response.json();
+
+    // This is the only tweak: fallback to empty array / 0 to avoid crashing
     return {
-      books: data.Books,
-      totalNumBooks: data.TotalNumBooks
+      books: result.books ?? [],
+      totalNumBooks: result.totalNumBooks ?? 0,
     };
   } catch (error) {
     console.error('Error fetching books: ', error);
