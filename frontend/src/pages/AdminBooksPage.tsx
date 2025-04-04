@@ -1,70 +1,91 @@
-import { useEffect, useState } from 'react';
-import { Book } from '../types/Book';
-
-const API_URL = 'https://your-backend-url.azurewebsites.net/Books';
-
-const emptyBook: Book = {
-  bookID: 0,
-  title: '',
-  author: '',
-  publisher: '',
-  isbn: '',
-  classification: '',
-  category: '',
-  price: 0,
-  pageCount: 0,
-};
+import { useEffect, useState } from "react";
+import { Book } from "../types/Book";
+import { fetchBooks, deleteBook } from "../api/BooksAPI";
+import Pagination from "../components/Pagination";
+import NewBookForm from "../components/NewBookForm";
+import EditBookForm from "../components/EditBookForm";
 
 const AdminBooksPage = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [newBook, setNewBook] = useState<Book>(emptyBook);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [showForm, setShowForm] = useState(false);
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
 
-  const fetchBooks = async () => {
-    const res = await fetch(`${API_URL}/AllBooks?pageHowMany=100&pageNum=1`);
-    const data = await res.json();
-    setBooks(data.books || data.Books); // handle casing
+  const loadBooks = async () => {
+    try {
+      const data = await fetchBooks(pageSize, pageNum, []);
+      setBooks(data.books);
+      setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchBooks();
-  }, []);
+    loadBooks();
+  }, [pageSize, pageNum]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewBook({
-      ...newBook,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleDelete = async (bookId: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this book?");
+    if (!confirmDelete) return;
 
-  const handleAddBook = async () => {
-    const res = await fetch(`${API_URL}/AddBook`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newBook),
-    });
-    if (res.ok) {
-      setNewBook(emptyBook);
-      fetchBooks();
+    try {
+      await deleteBook(bookId);
+      setBooks(books.filter((b) => b.bookID !== bookId));
+    } catch (error) {
+      alert("Failed to delete book. Please try again.");
     }
   };
 
-  const handleDelete = async (id: number) => {
-    const res = await fetch(`${API_URL}/DeleteBook/${id}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
-      fetchBooks();
-    }
-  };
+  if (loading) return <p>Loading books...</p>;
+  if (error) return <p className="text-danger">Error: {error}</p>;
 
   return (
-    <div className="container mt-4">
-      <h2>📚 Admin: Manage Books</h2>
+    <div>
+      <h1>Admin - Books</h1>
 
-      <table className="table table-striped table-bordered mt-4">
-        <thead className="table-light">
+      {!showForm && (
+        <button className="btn btn-success mb-3" onClick={() => setShowForm(true)}>
+          Add Book
+        </button>
+      )}
+
+      {showForm && (
+        <NewBookForm
+          onSuccess={() => {
+            setShowForm(false);
+            loadBooks();
+          }}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
+      {editingBook && (
+        <EditBookForm
+          book={editingBook}
+          onSuccess={() => {
+            setEditingBook(null);
+            loadBooks();
+          }}
+          onCancel={() => setEditingBook(null)}
+        />
+      )}
+
+      <table className="table table-striped table-bordered">
+        <thead className="table-dark">
           <tr>
-            <th>Title</th><th>Author</th><th>Category</th><th>Price</th><th>Actions</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Pages</th>
+            <th>Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -73,38 +94,37 @@ const AdminBooksPage = () => {
               <td>{b.title}</td>
               <td>{b.author}</td>
               <td>{b.category}</td>
+              <td>{b.pageCount}</td>
               <td>${b.price.toFixed(2)}</td>
               <td>
-                {/* Add Update functionality later */}
-                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(b.bookID)}>Delete</button>
+                <button
+                  className="btn btn-primary btn-sm w-100 mb-1"
+                  onClick={() => setEditingBook(b)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-danger btn-sm w-100"
+                  onClick={() => handleDelete(b.bookID)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <h4>Add New Book</h4>
-      <div className="row">
-        <div className="col-md-3 mb-2">
-          <input name="title" className="form-control" placeholder="Title" value={newBook.title} onChange={handleInputChange} />
-        </div>
-        <div className="col-md-3 mb-2">
-          <input name="author" className="form-control" placeholder="Author" value={newBook.author} onChange={handleInputChange} />
-        </div>
-        <div className="col-md-3 mb-2">
-          <input name="category" className="form-control" placeholder="Category" value={newBook.category} onChange={handleInputChange} />
-        </div>
-        <div className="col-md-3 mb-2">
-          <input name="price" className="form-control" placeholder="Price" type="number" value={newBook.price} onChange={handleInputChange} />
-        </div>
-      </div>
-      <div className="d-flex gap-3">
-        <input name="publisher" className="form-control" placeholder="Publisher" value={newBook.publisher} onChange={handleInputChange} />
-        <input name="isbn" className="form-control" placeholder="ISBN" value={newBook.isbn} onChange={handleInputChange} />
-        <input name="classification" className="form-control" placeholder="Classification" value={newBook.classification} onChange={handleInputChange} />
-        <input name="pageCount" className="form-control" placeholder="Page Count" type="number" value={newBook.pageCount} onChange={handleInputChange} />
-        <button className="btn btn-primary" onClick={handleAddBook}>Add</button>
-      </div>
+      <Pagination
+        currentPage={pageNum}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNum}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPageNum(1);
+        }}
+      />
     </div>
   );
 };
