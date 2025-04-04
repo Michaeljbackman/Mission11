@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart } = useCart();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
